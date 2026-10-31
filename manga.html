@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAMURAI SHOP — Каталог Манги</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #F7F4EE; color: #181818; font-family: 'Inter', sans-serif; }
+    .font-title { font-family: 'Cinzel', serif; }
+    .product-card { background: #FFFFFF; border: 1px solid #E2DDD5; transition: all 0.25s ease; }
+    .product-card:hover { transform: translateY(-5px); box-shadow: 0 14px 28px rgba(24,24,24,0.1); border-color: #C5A059; }
+    .btn-samurai { background-color: #181818; color: #F7F4EE; transition: 0.2s; cursor: pointer; }
+    .btn-samurai:hover { background-color: #9E2A2B; color: #FFFFFF; }
+    .btn-crimson { background-color: #9E2A2B; color: #FFFFFF; transition: 0.2s; cursor: pointer; }
+    .btn-crimson:hover { background-color: #7d2021; }
+    .filter-active { background-color: #9E2A2B !important; color: #FFFFFF !important; border-color: #9E2A2B !important; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- УВЕДОМЛЕНИЕ -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-[#181818] text-[#F7F4EE] px-5 py-3 rounded-lg shadow-2xl border-l-4 border-[#9E2A2B] flex items-center gap-3">
+    <i class="fa-solid fa-circle-check text-[#C5A059]"></i>
+    <span id="toast-msg" class="text-sm font-medium">Добавлено в корзину!</span>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО БЫСТРОГО ПРОСМОТРА -->
+  <div id="quick-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#F7F4EE] border-2 border-[#C5A059] rounded-2xl max-w-2xl w-full p-6 relative shadow-2xl grid md:grid-cols-2 gap-6 items-center">
+      <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-[#181818] text-white hover:bg-[#9E2A2B] flex items-center justify-center">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="h-80 bg-white rounded-xl overflow-hidden flex items-center justify-center border border-[#E2DDD5]">
+        <img id="modal-img" src="" alt="" class="h-full w-full object-cover">
+      </div>
+      <div class="space-y-3">
+        <span id="modal-badge" class="inline-block bg-[#9E2A2B] text-white text-xs font-bold px-3 py-1 rounded uppercase"></span>
+        <h3 id="modal-title" class="font-title text-2xl font-bold"></h3>
+        <p id="modal-desc" class="text-sm text-gray-600 leading-relaxed"></p>
+        <div class="pt-2">
+          <span id="modal-price" class="text-2xl font-extrabold text-[#9E2A2B]"></span>
+        </div>
+        <div class="pt-3 flex gap-3">
+          <button id="modal-add-btn" class="btn-crimson px-6 py-3 rounded-lg font-bold text-sm w-full">
+            + Добавить в корзину
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+  <div class="bg-[#181818] text-[#F7F4EE] text-xs py-2 px-4 border-b border-[#C5A059]/30">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
+      <div><span class="bg-[#9E2A2B] text-white px-2 py-0.5 rounded font-bold mr-2">SAMURAI SHOP</span> Официальный магазин манги и книг</div>
+      <div>Промокод на 15%: <strong class="text-[#C5A059]">SAMURAI15</strong></div>
+    </div>
+  </div>
+
+  <!-- ШАПКА САЙТА -->
+  <header class="sticky top-0 z-40 bg-[#F7F4EE]/95 backdrop-blur-md border-b border-[#E2DDD5] shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-lg bg-[#181818] text-[#F7F4EE] flex items-center justify-center font-bold text-xl border-2 border-[#C5A059]">侍</div>
+        <div>
+          <span class="font-title text-2xl font-extrabold tracking-wider block leading-none">SAMURAI SHOP</span>
+          <span class="text-[10px] uppercase tracking-widest text-[#9E2A2B] font-bold">Manga & Books Store</span>
+        </div>
+      </a>
+
+      <nav class="flex flex-wrap items-center gap-3 sm:gap-6 text-sm font-medium">
+        <a href="index.html" class="hover:text-[#9E2A2B] py-1 transition">1. Главная</a>
+        <a href="manga.html" class="text-[#9E2A2B] border-b-2 border-[#9E2A2B] font-bold py-1">2. Манга</a>
+        <a href="books.html" class="hover:text-[#9E2A2B] py-1 transition">3. Книги</a>
+        <a href="special.html" class="hover:text-[#9E2A2B] py-1 transition">4. Спецколлекция</a>
+        <a href="cart.html" class="bg-[#181818] text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-[#9E2A2B] transition">
+          <i class="fa-solid fa-cart-shopping text-[#C5A059]"></i>
+          <span>5. Корзина</span>
+          <span id="cart-badge" class="bg-[#9E2A2B] text-white text-xs px-2 py-0.5 rounded-full">0</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ОСНОВНОЙ КОНТЕНТ КАТАЛОГА МАНГИ -->
+  <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+
+    <!-- Баннер каталога -->
+    <div class="bg-[#181818] text-[#F7F4EE] rounded-2xl p-6 md:p-10 mb-8 border border-[#C5A059]/40 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div>
+        <span class="text-xs uppercase tracking-widest text-[#C5A059] font-bold">Страница 2 из 5 • Полный каталог</span>
+        <h1 class="font-title text-3xl md:text-4xl font-bold mt-1">КАТАЛОГ МАНГИ SAMURAI SHOP</h1>
+        <p class="text-gray-300 text-sm mt-2 max-w-2xl">
+          Все оригинальные тома «Блю Лок» (1, 2, 7, 18) и «Магическая битва» (1, 5, 15, 26), а также лимитированные выпуски.
+        </p>
+      </div>
+      <a href="special.html" class="btn-crimson px-5 py-3 rounded-lg text-xs font-bold uppercase tracking-wider">
+        Смотреть 4-ю страницу (Спецколлекция) →
+      </a>
+    </div>
+
+    <!-- Фильтры и поиск -->
+    <div class="bg-[#EFECE6] p-4 rounded-xl border border-[#E2DDD5] mb-8 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="setFilter('all')" id="btn-all" class="filter-btn filter-active bg-white text-[#181818] px-4 py-2 rounded-lg text-xs font-bold border border-[#E2DDD5] transition">
+          Все тома (13)
+        </button>
+        <button onclick="setFilter('bluelock')" id="btn-bluelock" class="filter-btn bg-white text-[#181818] px-4 py-2 rounded-lg text-xs font-bold border border-[#E2DDD5] transition">
+          Блю Лок (Blue Lock)
+        </button>
+        <button onclick="setFilter('jjk')" id="btn-jjk" class="filter-btn bg-white text-[#181818] px-4 py-2 rounded-lg text-xs font-bold border border-[#E2DDD5] transition">
+          Магическая битва
+        </button>
+        <button onclick="setFilter('special')" id="btn-special" class="filter-btn bg-white text-[#181818] px-4 py-2 rounded-lg text-xs font-bold border border-[#E2DDD5] transition">
+          Спецвыпуски
+        </button>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+        <div class="relative flex-grow md:w-64">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+          <input type="text" id="search-input" oninput="renderManga()" placeholder="Поиск тома или героя..." class="w-full pl-9 pr-4 py-2 rounded-lg bg-white border border-[#E2DDD5] text-sm focus:outline-none focus:border-[#9E2A2B]">
+        </div>
+        <select id="sort-select" onchange="renderManga()" class="px-3 py-2 rounded-lg bg-white border border-[#E2DDD5] text-sm font-medium focus:outline-none">
+          <option value="default">По умолчанию</option>
+          <option value="asc">Сначала дешевле</option>
+          <option value="desc">Сначала дороже</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Сетка товаров -->
+    <div id="manga-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+
+  </main>
+
+  <!-- ПОДВАЛ -->
+  <footer class="bg-[#181818] text-[#F7F4EE] py-8 px-4 border-t border-[#C5A059]/40 mt-12">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4 text-sm">
+      <div><strong class="font-title text-lg text-[#C5A059]">SAMURAI SHOP</strong> — Магазин манги и книг © 2026</div>
+      <div class="flex gap-4 text-gray-400">
+        <a href="index.html" class="hover:text-white">Главная</a>
+        <a href="manga.html" class="hover:text-white">Манга</a>
+        <a href="books.html" class="hover:text-white">Книги</a>
+        <a href="special.html" class="hover:text-white">Спецколлекция</a>
+        <a href="cart.html" class="hover:text-white">Корзина</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const mangaList = [
+      // Блю Лок (твои фото)
+      { id: 1, category: "bluelock", title: "Блю Лок (Blue Lock) — Том 1", price: 690, badge: "Том 1", img: "https://ir.ozone.ru/s3/multimedia-p/c1000/6676561573.jpg", desc: "Начало проекта «Синяя тюрьма». 300 юных нападающих борются за место единственного лучшего форварда сборной Японии." },
+      { id: 2, category: "bluelock", title: "Блю Лок (Blue Lock) — Том 2", price: 690, badge: "Том 2", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcME6IyGnrFGbrZov5c_nAK3dc1wlC2AlD_lnTEl0Ufg&s=10", desc: "Первый отборочный этап внутри корпуса Z. Пробуждение пространственного видения Исаги Йоичи." },
+      { id: 3, category: "bluelock", title: "Блю Лок (Blue Lock) — Том 7", price: 720, badge: "Том 7", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTB9-zwUhhoeduBfAAlY-zYKD_Xnm6Eyz6x3qfEwPN1Iw&s=10", desc: "Второй отбор и битва на выбывание. Формирование сильнейших троек и дуэль против Рина Итоши." },
+      { id: 4, category: "bluelock", title: "Блю Лок (Blue Lock) — Том 18", price: 750, badge: "Том 18", img: "https://i.pinimg.com/236x/94/5a/28/945a28aa8d9e67c96f0aca242093c23d.jpg", desc: "Лига Нео-Эгоистов! Клубы Европы вступают в игру, а Исаги выходит на уровень мировых звёзд." },
+
+      // Магическая битва (твои фото)
+      { id: 5, category: "jjk", title: "Магическая битва — Том 1", price: 690, badge: "Том 1", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTuKtDS8PO9hvonuVYQvfPI3s0fQH76z4RxSJOYaz7-g&s=10", desc: "Юдзи Итадори проглатывает проклятый палец Двуликого Сукуны и поступает в Токийский магический колледж." },
+      { id: 6, category: "jjk", title: "Магическая битва — Том 5", price: 710, badge: "Том 5", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgY9YI_GhWOifQTCbjsbPnRukk6o2epg1dlOd8Vus8fw&s=10", desc: "Программа обмена с Киотским колледжем! Аой Тодо и Юдзи Итадори сражаются плечом к плечу против Ханами." },
+      { id: 7, category: "jjk", title: "Магическая битва — Том 15", price: 750, badge: "Том 15", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwp6PIAw85mCsPjupd2RPswvixnmLEjMuyCFxXzbgxXg&s=10", desc: "Кульминация Инцидента в Сибуе. Махито против Итадори и Тодо в решающей схватке." },
+      { id: 8, category: "jjk", title: "Магическая битва — Том 26", price: 790, badge: "Том 26 • Хит", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiMVHsEsQTlPoyIFS-Vhy2MCJkKMgHDRSGcYWlNF37tA&s=10", desc: "Легендарная битва сильнейшего мага современности Сатору Годжо против Короля проклятий Сукуны." },
+
+      // Спецвыпуски (твои 5 дополнительных фото)
+      { id: 401, category: "special", title: "Jujutsu Kaisen — Спецвыпуск «Король Проклятий»", price: 890, badge: "Эксклюзив #1", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7UQk3Z712ubkL-6KH1kPpLb9yR7S0iEPepSWUIYxLXg&s=10", desc: "Лимитированное издание с альтернативной обложкой и цветными вкладками." },
+      { id: 402, category: "special", title: "Blue Lock — Коллекционный Том «Пробуждение Эго»", price: 890, badge: "Эксклюзив #2", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8b8XzbzOdHdb_dJMheD-Ly1Kt59wQeYGwuTgbjU8jCQ&s=10", desc: "Специальное издание для фанатов Blue Lock с постер-карточками внутри." },
+      { id: 403, category: "special", title: "Jujutsu Kaisen — Арка «Скрытый Инвентарь»", price: 920, badge: "Эксклюзив #3", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMGeFZF5-WzRktgRuD2OvnYoce5XmRzYryOwypGgeqbQ&s=10", desc: "История прошлого Сатору Годжо и Сугуру Гето в подарочном оформлении." },
+      { id: 404, category: "special", title: "Blue Lock: Эпизод Наги — Limited Edition", price: 950, badge: "Эксклюзив #4", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCGy9sUoRy3AkqcQvfYy9EhsPfaipECBaCK64OouYbWA&s=10", desc: "Взгляд на «Синюю тюрьму» глазами гения Сейширо Наги и Рео Микаге." },
+      { id: 405, category: "special", title: "Jujutsu Kaisen — Финальная Битва в Синдзюку", price: 990, badge: "Эксклюзив #5", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQk9auOlILW_DnjARHoAaGefJsGO4kDW1s-LYg_GQ-qw&s=10", desc: "Делюкс-выпуск главной битвы манги с тиснением золотой фольгой." }
+    ];
+
+    let activeCategory = 'all';
+
+    function setFilter(cat) {
+      activeCategory = cat;
+      ['all', 'bluelock', 'jjk', 'special'].forEach(c => {
+        document.getElementById('btn-' + c).classList.toggle('filter-active', c === cat);
+      });
+      renderManga();
+    }
+
+    function renderManga() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const sort = document.getElementById('sort-select').value;
+
+      let filtered = mangaList.filter(item => {
+        const matchCat = activeCategory === 'all' || item.category === activeCategory;
+        const matchSearch = item.title.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query);
+        return matchCat && matchSearch;
+      });
+
+      if (sort === 'asc') filtered.sort((a, b) => a.price - b.price);
+      if (sort === 'desc') filtered.sort((a, b) => b.price - a.price);
+
+      const grid = document.getElementById('manga-grid');
+      grid.innerHTML = filtered.map(p => `
+        <div class="product-card rounded-xl overflow-hidden flex flex-col justify-between p-4">
+          <div>
+            <div class="relative h-72 rounded-lg overflow-hidden mb-3 bg-[#EFECE6] group">
+              <img src="${p.img}" alt="${p.title}" class="h-full w-full object-cover">
+              <span class="absolute top-2 left-2 bg-[#9E2A2B] text-white text-xs font-bold px-2.5 py-1 rounded">${p.badge}</span>
+              <button onclick="openModal(${p.id})" class="absolute bottom-2 right-2 bg-black/80 hover:bg-[#9E2A2B] text-white text-xs px-3 py-1.5 rounded-lg transition">
+                <i class="fa-solid fa-eye mr-1"></i> Подробнее
+              </button>
+            </div>
+            <h3 class="font-bold text-base leading-snug">${p.title}</h3>
+            <p class="text-xs text-gray-500 mt-1 line-clamp-2">${p.desc}</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-[#E2DDD5] flex items-center justify-between">
+            <span class="text-lg font-extrabold text-[#9E2A2B]">${p.price} ₽</span>
+            <button onclick="addToCart(${p.id})" class="btn-samurai px-4 py-2 rounded-lg text-xs font-bold">
+              + В корзину
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openModal(id) {
+      const p = mangaList.find(i => i.id === id);
+      if (!p) return;
+      document.getElementById('modal-img').src = p.img;
+      document.getElementById('modal-badge').innerText = p.badge;
+      document.getElementById('modal-title').innerText = p.title;
+      document.getElementById('modal-desc').innerText = p.desc;
+      document.getElementById('modal-price').innerText = p.price + ' ₽';
+      document.getElementById('modal-add-btn').onclick = () => { addToCart(p.id); closeModal(); };
+      document.getElementById('quick-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('quick-modal').classList.add('hidden');
+    }
+
+    function getCart() { return JSON.parse(localStorage.getItem('samurai_cart') || '[]'); }
+    function updateBadge() {
+      const count = getCart().reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('cart-badge').innerText = count;
+    }
+
+    function addToCart(id) {
+      const p = mangaList.find(i => i.id === id);
+      if (!p) return;
+      const cart = getCart();
+      const found = cart.find(i => i.id === p.id);
+      if (found) found.qty += 1;
+      else cart.push({ id: p.id, title: p.title, price: p.price, img: p.img, qty: 1 });
+      localStorage.setItem('samurai_cart', JSON.stringify(cart));
+      updateBadge();
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').innerText = p.title + " добавлен в корзину!";
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 2500);
+    }
+
+    renderManga();
+    updateBadge();
+  </script>
+</body>
+</html>

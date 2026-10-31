@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAMURAI SHOP — Спецколлекция</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #F7F4EE; color: #181818; font-family: 'Inter', sans-serif; }
+    .font-title { font-family: 'Cinzel', serif; }
+    .product-card { background: #FFFFFF; border: 1px solid #E2DDD5; transition: all 0.25s ease; }
+    .product-card:hover { transform: translateY(-5px); box-shadow: 0 14px 28px rgba(24,24,24,0.12); border-color: #C5A059; }
+    .btn-samurai { background-color: #181818; color: #F7F4EE; transition: 0.2s; cursor: pointer; }
+    .btn-samurai:hover { background-color: #9E2A2B; color: #FFFFFF; }
+    .btn-crimson { background-color: #9E2A2B; color: #FFFFFF; transition: 0.2s; cursor: pointer; }
+    .btn-crimson:hover { background-color: #7d2021; }
+    .btn-gold { background-color: #C5A059; color: #181818; transition: 0.2s; cursor: pointer; }
+    .btn-gold:hover { background-color: #b08d47; color: #FFFFFF; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- УВЕДОМЛЕНИЕ -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-[#181818] text-[#F7F4EE] px-5 py-3 rounded-lg shadow-2xl border-l-4 border-[#C5A059] flex items-center gap-3">
+    <i class="fa-solid fa-crown text-[#C5A059]"></i>
+    <span id="toast-msg" class="text-sm font-medium">Добавлено в корзину!</span>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО ПРОСМОТРА ЭКСКЛЮЗИВА -->
+  <div id="special-modal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#F7F4EE] border-2 border-[#C5A059] rounded-2xl max-w-2xl w-full p-6 relative shadow-2xl grid md:grid-cols-2 gap-6 items-center">
+      <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-[#181818] text-white hover:bg-[#9E2A2B] flex items-center justify-center">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="h-80 bg-white rounded-xl overflow-hidden flex items-center justify-center border border-[#E2DDD5]">
+        <img id="modal-img" src="" alt="" class="h-full w-full object-cover">
+      </div>
+      <div class="space-y-3">
+        <span id="modal-badge" class="inline-block bg-[#181818] text-[#C5A059] border border-[#C5A059] text-xs font-bold px-3 py-1 rounded uppercase"></span>
+        <h3 id="modal-title" class="font-title text-2xl font-bold"></h3>
+        <p id="modal-edition" class="text-xs font-bold uppercase tracking-wider text-[#9E2A2B]"></p>
+        <p id="modal-desc" class="text-sm text-gray-600 leading-relaxed"></p>
+        <div class="pt-2">
+          <span id="modal-price" class="text-2xl font-extrabold text-[#9E2A2B]"></span>
+        </div>
+        <div class="pt-3">
+          <button id="modal-add-btn" class="btn-crimson px-6 py-3 rounded-lg font-bold text-sm w-full">
+            + Добавить в корзину
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+  <div class="bg-[#181818] text-[#F7F4EE] text-xs py-2 px-4 border-b border-[#C5A059]/30">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
+      <div><span class="bg-[#9E2A2B] text-white px-2 py-0.5 rounded font-bold mr-2">SAMURAI SHOP</span> Лимитированная коллекция изданий</div>
+      <div>Промокод на 15%: <strong class="text-[#C5A059]">SAMURAI15</strong></div>
+    </div>
+  </div>
+
+  <!-- ШАПКА САЙТА -->
+  <header class="sticky top-0 z-40 bg-[#F7F4EE]/95 backdrop-blur-md border-b border-[#E2DDD5] shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-lg bg-[#181818] text-[#F7F4EE] flex items-center justify-center font-bold text-xl border-2 border-[#C5A059]">侍</div>
+        <div>
+          <span class="font-title text-2xl font-extrabold tracking-wider block leading-none">SAMURAI SHOP</span>
+          <span class="text-[10px] uppercase tracking-widest text-[#9E2A2B] font-bold">Manga & Books Store</span>
+        </div>
+      </a>
+
+      <nav class="flex flex-wrap items-center gap-3 sm:gap-6 text-sm font-medium">
+        <a href="index.html" class="hover:text-[#9E2A2B] py-1 transition">1. Главная</a>
+        <a href="manga.html" class="hover:text-[#9E2A2B] py-1 transition">2. Манга</a>
+        <a href="books.html" class="hover:text-[#9E2A2B] py-1 transition">3. Книги</a>
+        <a href="special.html" class="text-[#9E2A2B] border-b-2 border-[#9E2A2B] font-bold py-1">4. Спецколлекция</a>
+        <a href="cart.html" class="bg-[#181818] text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-[#9E2A2B] transition">
+          <i class="fa-solid fa-cart-shopping text-[#C5A059]"></i>
+          <span>5. Корзина</span>
+          <span id="cart-badge" class="bg-[#9E2A2B] text-white text-xs px-2 py-0.5 rounded-full">0</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ОСНОВНОЙ КОНТЕНТ 4-Й СТРАНИЦЫ (СПЕЦКОЛЛЕКЦИЯ С 5 ФОТО) -->
+  <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+
+    <!-- VIP Баннер Спецколлекции -->
+    <div class="bg-[#181818] text-[#F7F4EE] rounded-2xl p-6 md:p-10 mb-10 border-2 border-[#C5A059] shadow-2xl">
+      <div class="grid md:grid-cols-12 gap-8 items-center">
+        <div class="md:col-span-7 space-y-4">
+          <span class="inline-block bg-[#C5A059] text-[#181818] text-xs font-extrabold px-3 py-1 rounded uppercase tracking-wider">
+            Страница 4 из 5 • Limited Edition
+          </span>
+          <h1 class="font-title text-3xl md:text-5xl font-bold leading-tight text-white">
+            ЗОЛОТАЯ СПЕЦКОЛЛЕКЦИЯ SAMURAI SHOP
+          </h1>
+          <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+            Эксклюзивная подборка из 5 редких коллекционных томов с альтернативными японскими обложками, голографическим тиснением и бонусными открытками внутри каждого издания.
+          </p>
+          <div class="pt-2 flex flex-wrap items-center gap-4">
+            <button onclick="addFullPack()" class="btn-gold px-6 py-3.5 rounded-xl font-extrabold text-sm shadow-lg flex items-center gap-2">
+              <i class="fa-solid fa-box-open"></i>
+              <span>Забрать все 5 томов (VIP-Бокс — 3 990 ₽)</span>
+            </button>
+            <a href="cart.html" class="bg-white/10 hover:bg-white/20 text-white px-5 py-3.5 rounded-xl font-semibold text-sm border border-white/20">
+              Перейти к оформлению →
+            </a>
+          </div>
+        </div>
+
+        <!-- Мини-галерея всех 5 обложек в баннере -->
+        <div class="md:col-span-5 grid grid-cols-5 gap-2 items-center">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7UQk3Z712ubkL-6KH1kPpLb9yR7S0iEPepSWUIYxLXg&s=10" class="w-full h-36 object-cover rounded-lg border border-[#C5A059]" alt="1">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8b8XzbzOdHdb_dJMheD-Ly1Kt59wQeYGwuTgbjU8jCQ&s=10" class="w-full h-40 object-cover rounded-lg border border-[#C5A059]" alt="2">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMGeFZF5-WzRktgRuD2OvnYoce5XmRzYryOwypGgeqbQ&s=10" class="w-full h-44 object-cover rounded-lg border-2 border-[#C5A059] shadow-xl" alt="3">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCGy9sUoRy3AkqcQvfYy9EhsPfaipECBaCK64OouYbWA&s=10" class="w-full h-40 object-cover rounded-lg border border-[#C5A059]" alt="4">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQk9auOlILW_DnjARHoAaGefJsGO4kDW1s-LYg_GQ-qw&s=10" class="w-full h-36 object-cover rounded-lg border border-[#C5A059]" alt="5">
+        </div>
+      </div>
+    </div>
+
+    <!-- Заголовок витрины -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+      <div>
+        <h2 class="font-title text-2xl md:text-3xl font-bold">5 ЭКСКЛЮЗИВНЫХ ИЗДАНИЙ КОЛЛЕКЦИИ</h2>
+        <p class="text-sm text-gray-600">Вы можете приобрести каждый том отдельно или собрать полный комплект</p>
+      </div>
+    </div>
+
+    <!-- Сетка из 5 карточек спецколлекции -->
+    <div id="special-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+
+  </main>
+
+  <!-- ПОДВАЛ -->
+  <footer class="bg-[#181818] text-[#F7F4EE] py-8 px-4 border-t border-[#C5A059]/40 mt-12">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4 text-sm">
+      <div><strong class="font-title text-lg text-[#C5A059]">SAMURAI SHOP</strong> — Магазин манги и книг © 2026</div>
+      <div class="flex gap-4 text-gray-400">
+        <a href="index.html" class="hover:text-white">Главная</a>
+        <a href="manga.html" class="hover:text-white">Манга</a>
+        <a href="books.html" class="hover:text-white">Книги</a>
+        <a href="special.html" class="hover:text-white">Спецколлекция</a>
+        <a href="cart.html" class="hover:text-white">Корзина</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Твои 5 фотографий для 4-й страницы с подобранными названиями
+    const specialItems = [
+      {
+        id: 401,
+        title: "Jujutsu Kaisen — Спецвыпуск «Король Проклятий Сукуна»",
+        edition: "Limited Edition #01 • Альтернативная обложка",
+        price: 890,
+        badge: "Эксклюзив #1",
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7UQk3Z712ubkL-6KH1kPpLb9yR7S0iEPepSWUIYxLXg&s=10",
+        desc: "Коллекционный том с матовой суперобложкой, цветным разворотом и металлизированной закладкой с символикой Двуликого Сукуны."
+      },
+      {
+        id: 402,
+        title: "Blue Lock — Коллекционный Том «Пробуждение Эгоиста»",
+        edition: "Limited Edition #02 • Спецвыпуск",
+        price: 890,
+        badge: "Эксклюзив #2",
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8b8XzbzOdHdb_dJMheD-Ly1Kt59wQeYGwuTgbjU8jCQ&s=10",
+        desc: "Редкое печатное издание ключевых матчей «Синей тюрьмы» с эксклюзивной карточкой игрока и расширенными страницами."
+      },
+      {
+        id: 403,
+        title: "Jujutsu Kaisen — Подарочная Арка «Скрытый Инвентарь & Годжо»",
+        edition: "Limited Edition #03 • Выбор коллекционеров",
+        price: 920,
+        badge: "Эксклюзив #3",
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMGeFZF5-WzRktgRuD2OvnYoce5XmRzYryOwypGgeqbQ&s=10",
+        desc: "Специальное издание легендарной арки юности Сатору Годжо и Сугуру Гето на плотной кремовой бумаге повышенной белизны."
+      },
+      {
+        id: 404,
+        title: "Blue Lock: Эпизод Наги — Deluxe Издание",
+        edition: "Limited Edition #04 • Спин-офф Серия",
+        price: 950,
+        badge: "Эксклюзив #4",
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCGy9sUoRy3AkqcQvfYy9EhsPfaipECBaCK64OouYbWA&s=10",
+        desc: "История гениального Сейширо Наги и Рео Микаге в коллекционном переплёте с двухсторонним мини-постером."
+      },
+      {
+        id: 405,
+        title: "Jujutsu Kaisen — Финальная Битва в Синдзюку (Gold Foil)",
+        edition: "Limited Edition #05 • Тиснение золотом",
+        price: 990,
+        badge: "Эксклюзив #5",
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQk9auOlILW_DnjARHoAaGefJsGO4kDW1s-LYg_GQ-qw&s=10",
+        desc: "Главное противостояние современной манги в подарочном исполнении с золотым тиснением логотипа на обложке."
+      }
+    ];
+
+    function renderSpecial() {
+      const grid = document.getElementById('special-grid');
+      grid.innerHTML = specialItems.map(item => `
+        <div class="product-card rounded-2xl overflow-hidden flex flex-col justify-between p-5 border-2 border-[#E2DDD5]">
+          <div>
+            <div class="relative h-80 rounded-xl overflow-hidden mb-4 bg-[#EFECE6]">
+              <img src="${item.img}" alt="${item.title}" class="h-full w-full object-cover">
+              <span class="absolute top-3 left-3 bg-[#181818] text-[#C5A059] border border-[#C5A059] text-xs font-extrabold px-3 py-1 rounded-md shadow">
+                ${item.badge}
+              </span>
+              <button onclick="openModal(${item.id})" class="absolute bottom-3 right-3 bg-black/80 hover:bg-[#9E2A2B] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition">
+                <i class="fa-solid fa-magnifying-glass-plus mr-1"></i> Детали
+              </button>
+            </div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-[#9E2A2B]">${item.edition}</span>
+            <h3 class="font-title font-bold text-lg leading-snug mt-1">${item.title}</h3>
+            <p class="text-xs text-gray-600 mt-2 leading-relaxed">${item.desc}</p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-[#E2DDD5] flex items-center justify-between">
+            <div>
+              <span class="text-xs text-gray-400 block">Цена издания:</span>
+              <span class="text-xl font-extrabold text-[#9E2A2B]">${item.price} ₽</span>
+            </div>
+            <button onclick="addToCart(${item.id})" class="btn-crimson px-5 py-2.5 rounded-xl text-xs font-bold shadow">
+              + В корзину
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openModal(id) {
+      const item = specialItems.find(x => x.id === id);
+      if (!item) return;
+      document.getElementById('modal-img').src = item.img;
+      document.getElementById('modal-badge').innerText = item.badge;
+      document.getElementById('modal-title').innerText = item.title;
+      document.getElementById('modal-edition').innerText = item.edition;
+      document.getElementById('modal-desc').innerText = item.desc;
+      document.getElementById('modal-price').innerText = item.price + " ₽";
+      document.getElementById('modal-add-btn').onclick = () => { addToCart(item.id); closeModal(); };
+      document.getElementById('special-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('special-modal').classList.add('hidden');
+    }
+
+    function getCart() { return JSON.parse(localStorage.getItem('samurai_cart') || '[]'); }
+    function updateBadge() {
+      const count = getCart().reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('cart-badge').innerText = count;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').innerText = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 2500);
+    }
+
+    function addToCart(id) {
+      const item = specialItems.find(x => x.id === id);
+      if (!item) return;
+      const cart = getCart();
+      const found = cart.find(i => i.id === item.id);
+      if (found) found.qty += 1;
+      else cart.push({ id: item.id, title: item.title, price: item.price, img: item.img, qty: 1 });
+      localStorage.setItem('samurai_cart', JSON.stringify(cart));
+      updateBadge();
+      showToast(item.title + " добавлен в корзину!");
+    }
+
+    function addFullPack() {
+      const cart = getCart();
+      const packId = 499;
+      const found = cart.find(i => i.id === packId);
+      if (found) found.qty += 1;
+      else cart.push({
+        id: packId,
+        title: "VIP-Бокс: Все 5 томов Спецколлекции SAMURAI SHOP",
+        price: 3990,
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMGeFZF5-WzRktgRuD2OvnYoce5XmRzYryOwypGgeqbQ&s=10",
+        qty: 1
+      });
+      localStorage.setItem('samurai_cart', JSON.stringify(cart));
+      updateBadge();
+      showToast("VIP-Бокс (все 5 томов) добавлен в корзину!");
+    }
+
+    renderSpecial();
+    updateBadge();
+  </script>
+</body>
+</html>

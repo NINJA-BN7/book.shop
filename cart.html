@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAMURAI SHOP — Корзина и Оформление</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #F7F4EE; color: #181818; font-family: 'Inter', sans-serif; }
+    .font-title { font-family: 'Cinzel', serif; }
+    .btn-samurai { background-color: #181818; color: #F7F4EE; transition: 0.2s; cursor: pointer; }
+    .btn-samurai:hover { background-color: #9E2A2B; color: #FFFFFF; }
+    .btn-crimson { background-color: #9E2A2B; color: #FFFFFF; transition: 0.2s; cursor: pointer; }
+    .btn-crimson:hover { background-color: #7d2021; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- УВЕДОМЛЕНИЕ -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-[#181818] text-[#F7F4EE] px-5 py-3 rounded-lg shadow-2xl border-l-4 border-[#9E2A2B] flex items-center gap-3">
+    <i class="fa-solid fa-circle-check text-[#C5A059]"></i>
+    <span id="toast-msg" class="text-sm font-medium">Корзина обновлена!</span>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО УСПЕШНОГО ЗАКАЗА -->
+  <div id="order-success-modal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#F7F4EE] border-2 border-[#C5A059] rounded-2xl max-w-md w-full p-8 text-center shadow-2xl space-y-4">
+      <div class="w-16 h-16 rounded-full bg-[#181818] text-[#C5A059] flex items-center justify-center text-3xl mx-auto border-2 border-[#C5A059]">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <h3 class="font-title text-2xl font-bold">ЗАКАЗ ПРИНЯТ!</h3>
+      <p id="order-success-text" class="text-sm text-gray-600 leading-relaxed"></p>
+      <div class="pt-3">
+        <a href="index.html" class="btn-crimson px-6 py-3 rounded-xl font-bold text-sm inline-block w-full">
+          Вернуться на Главную
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+  <div class="bg-[#181818] text-[#F7F4EE] text-xs py-2 px-4 border-b border-[#C5A059]/30">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
+      <div><span class="bg-[#9E2A2B] text-white px-2 py-0.5 rounded font-bold mr-2">SAMURAI SHOP</span> Быстрое оформление и бережная упаковка</div>
+      <div>Промокод на 15%: <strong class="text-[#C5A059]">SAMURAI15</strong></div>
+    </div>
+  </div>
+
+  <!-- ШАПКА САЙТА -->
+  <header class="sticky top-0 z-40 bg-[#F7F4EE]/95 backdrop-blur-md border-b border-[#E2DDD5] shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-lg bg-[#181818] text-[#F7F4EE] flex items-center justify-center font-bold text-xl border-2 border-[#C5A059]">侍</div>
+        <div>
+          <span class="font-title text-2xl font-extrabold tracking-wider block leading-none">SAMURAI SHOP</span>
+          <span class="text-[10px] uppercase tracking-widest text-[#9E2A2B] font-bold">Manga & Books Store</span>
+        </div>
+      </a>
+
+      <nav class="flex flex-wrap items-center gap-3 sm:gap-6 text-sm font-medium">
+        <a href="index.html" class="hover:text-[#9E2A2B] py-1 transition">1. Главная</a>
+        <a href="manga.html" class="hover:text-[#9E2A2B] py-1 transition">2. Манга</a>
+        <a href="books.html" class="hover:text-[#9E2A2B] py-1 transition">3. Книги</a>
+        <a href="special.html" class="hover:text-[#9E2A2B] py-1 transition">4. Спецколлекция</a>
+        <a href="cart.html" class="bg-[#9E2A2B] text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold">
+          <i class="fa-solid fa-cart-shopping text-[#C5A059]"></i>
+          <span>5. Корзина</span>
+          <span id="cart-badge" class="bg-[#181818] text-white text-xs px-2 py-0.5 rounded-full">0</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ОСНОВНОЙ КОНТЕНТ 5-Й СТРАНИЦЫ (КОРЗИНА) -->
+  <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+      <div>
+        <span class="text-xs uppercase tracking-widest text-[#9E2A2B] font-bold">Страница 5 из 5 • Оформление покупки</span>
+        <h1 class="font-title text-3xl md:text-4xl font-bold mt-1">ВАША КОРЗИНА В SAMURAI SHOP</h1>
+      </div>
+      <button onclick="clearCart()" class="text-xs font-bold text-gray-500 hover:text-[#9E2A2B] border border-[#E2DDD5] bg-white px-4 py-2 rounded-lg transition">
+        <i class="fa-solid fa-trash-can mr-1"></i> Очистить корзину
+      </button>
+    </div>
+
+    <div class="grid lg:grid-cols-12 gap-8">
+
+      <!-- СПИСОК ТОВАРОВ В КОРЗИНЕ -->
+      <div class="lg:col-span-7 space-y-4">
+        <div id="cart-items-container" class="space-y-4"></div>
+
+        <!-- Быстрое добавление популярных товаров прямо из корзины -->
+        <div class="bg-[#EFECE6] p-5 rounded-2xl border border-[#E2DDD5] mt-6">
+          <h3 class="font-title font-bold text-base mb-3">ДОБАВИТЬ ХИТ В ОДИН КЛИК:</h3>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <button onclick="quickAdd(1, 'Блю Лок — Том 1', 690, 'https://ir.ozone.ru/s3/multimedia-p/c1000/6676561573.jpg')" class="bg-white hover:border-[#9E2A2B] border border-[#E2DDD5] p-3 rounded-xl flex items-center gap-3 text-left transition">
+              <img src="https://ir.ozone.ru/s3/multimedia-p/c1000/6676561573.jpg" class="w-12 h-16 object-cover rounded" alt="">
+              <div>
+                <div class="text-xs font-bold">Блю Лок — Том 1</div>
+                <div class="text-xs text-[#9E2A2B] font-extrabold">+ 690 ₽</div>
+              </div>
+            </button>
+            <button onclick="quickAdd(8, 'Магическая битва — Том 26', 790, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiMVHsEsQTlPoyIFS-Vhy2MCJkKMgHDRSGcYWlNF37tA&s=10')" class="bg-white hover:border-[#9E2A2B] border border-[#E2DDD5] p-3 rounded-xl flex items-center gap-3 text-left transition">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiMVHsEsQTlPoyIFS-Vhy2MCJkKMgHDRSGcYWlNF37tA&s=10" class="w-12 h-16 object-cover rounded" alt="">
+              <div>
+                <div class="text-xs font-bold">Магическая битва — Том 26</div>
+                <div class="text-xs text-[#9E2A2B] font-extrabold">+ 790 ₽</div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- БЛОК РАСЧЁТА И ОФОРМЛЕНИЯ ЗАКАЗА -->
+      <div class="lg:col-span-5">
+        <div class="bg-white rounded-2xl p-6 border-2 border-[#E2DDD5] shadow-lg sticky top-24 space-y-5">
+          <h2 class="font-title text-xl font-bold border-b border-[#E2DDD5] pb-3">ДЕТАЛИ ЗАКАЗА</h2>
+
+          <!-- Промокод -->
+          <div>
+            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Промокод на скидку 15%</label>
+            <div class="flex gap-2">
+              <input type="text" id="promo-input" placeholder="Введите SAMURAI15" class="flex-grow px-3 py-2 rounded-lg bg-[#F7F4EE] border border-[#E2DDD5] text-sm uppercase font-bold focus:outline-none focus:border-[#9E2A2B]">
+              <button onclick="applyPromo()" class="btn-samurai px-4 py-2 rounded-lg text-xs font-bold">Применить</button>
+            </div>
+            <p id="promo-status" class="text-xs mt-1 text-gray-500">Используйте код <strong>SAMURAI15</strong></p>
+          </div>
+
+          <!-- Итоги по сумме -->
+          <div class="space-y-2 text-sm border-t border-b border-[#E2DDD5] py-4">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Товаров в корзине:</span>
+              <span id="sum-count" class="font-bold">0 шт.</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Сумма без скидки:</span>
+              <span id="sum-subtotal" class="font-bold">0 ₽</span>
+            </div>
+            <div class="flex justify-between text-[#9E2A2B]">
+              <span>Скидка по промокоду:</span>
+              <span id="sum-discount" class="font-bold">- 0 ₽</span>
+            </div>
+            <div class="flex justify-between text-lg font-extrabold pt-2 border-t border-[#E2DDD5]">
+              <span>ИТОГО К ОПЛАТЕ:</span>
+              <span id="sum-total" class="text-[#9E2A2B]">0 ₽</span>
+            </div>
+          </div>
+
+          <!-- Форма покупателя -->
+          <form onsubmit="submitOrder(event)" class="space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-gray-600 mb-1">Ваше имя *</label>
+              <input type="text" id="cust-name" required placeholder="Например, Тимур" class="w-full px-3 py-2.5 rounded-lg bg-[#F7F4EE] border border-[#E2DDD5] text-sm focus:outline-none focus:border-[#9E2A2B]">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-600 mb-1">Телефон для связи *</label>
+              <input type="tel" id="cust-phone" required placeholder="+998 / +7 (___) ___-__-__" class="w-full px-3 py-2.5 rounded-lg bg-[#F7F4EE] border border-[#E2DDD5] text-sm focus:outline-none focus:border-[#9E2A2B]">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-600 mb-1">Город и адрес доставки *</label>
+              <input type="text" id="cust-address" required placeholder="Улица, дом, пункт выдачи" class="w-full px-3 py-2.5 rounded-lg bg-[#F7F4EE] border border-[#E2DDD5] text-sm focus:outline-none focus:border-[#9E2A2B]">
+            </div>
+            <button type="submit" class="btn-crimson w-full py-3.5 rounded-xl font-bold text-sm uppercase tracking-wider shadow-lg mt-2">
+              Подтвердить заказ в SAMURAI SHOP
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ПОДВАЛ -->
+  <footer class="bg-[#181818] text-[#F7F4EE] py-8 px-4 border-t border-[#C5A059]/40 mt-12">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4 text-sm">
+      <div><strong class="font-title text-lg text-[#C5A059]">SAMURAI SHOP</strong> — Магазин манги и книг © 2026</div>
+      <div class="flex gap-4 text-gray-400">
+        <a href="index.html" class="hover:text-white">Главная</a>
+        <a href="manga.html" class="hover:text-white">Манга</a>
+        <a href="books.html" class="hover:text-white">Книги</a>
+        <a href="special.html" class="hover:text-white">Спецколлекция</a>
+        <a href="cart.html" class="hover:text-white">Корзина</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let discountPercent = 0;
+
+    function getCart() {
+      return JSON.parse(localStorage.getItem('samurai_cart') || '[]');
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem('samurai_cart', JSON.stringify(cart));
+      renderCart();
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').innerText = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 2200);
+    }
+
+    function changeQty(id, delta) {
+      let cart = getCart();
+      const item = cart.find(x => x.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(x => x.id !== id);
+      }
+      saveCart(cart);
+    }
+
+    function removeItem(id) {
+      const cart = getCart().filter(x => x.id !== id);
+      saveCart(cart);
+      showToast("Товар удалён из корзины");
+    }
+
+    function clearCart() {
+      localStorage.removeItem('samurai_cart');
+      renderCart();
+      showToast("Корзина очищена");
+    }
+
+    function quickAdd(id, title, price, img) {
+      const cart = getCart();
+      const found = cart.find(x => x.id === id);
+      if (found) found.qty += 1;
+      else cart.push({ id, title, price, img, qty: 1 });
+      saveCart(cart);
+      showToast(title + " добавлен!");
+    }
+
+    function applyPromo() {
+      const code = document.getElementById('promo-input').value.trim().toUpperCase();
+      const status = document.getElementById('promo-status');
+      if (code === 'SAMURAI15') {
+        discountPercent = 15;
+        status.innerHTML = '<span class="text-green-700 font-bold">Промокод SAMURAI15 активирован! Скидка 15%</span>';
+        showToast("Скидка 15% применена!");
+      } else {
+        discountPercent = 0;
+        status.innerHTML = '<span class="text-red-600 font-bold">Неверный код. Попробуйте SAMURAI15</span>';
+      }
+      renderCart();
+    }
+
+    function renderCart() {
+      const cart = getCart();
+      const container = document.getElementById('cart-items-container');
+      const totalCount = cart.reduce((sum, i) => sum + i.qty, 0);
+      document.getElementById('cart-badge').innerText = totalCount;
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-2xl p-10 text-center border border-[#E2DDD5] space-y-4">
+            <i class="fa-solid fa-basket-shopping text-4xl text-gray-300"></i>
+            <h3 class="font-title text-xl font-bold">ВАША КОРЗИНА ПОКА ПУСТА</h3>
+            <p class="text-sm text-gray-500">Перейдите в каталог манги, книг или спецколлекцию, чтобы выбрать тома.</p>
+            <div class="flex flex-wrap justify-center gap-3 pt-2">
+              <a href="manga.html" class="btn-crimson px-5 py-2.5 rounded-lg text-xs font-bold">Перейти к Манге</a>
+              <a href="books.html" class="btn-samurai px-5 py-2.5 rounded-lg text-xs font-bold">Перейти к Книгам</a>
+              <a href="special.html" class="btn-samurai px-5 py-2.5 rounded-lg text-xs font-bold">Спецколлекция</a>
+            </div>
+          </div>
+        `;
+      } else {
+        container.innerHTML = cart.map(item => `
+          <div class="bg-white rounded-xl p-4 border border-[#E2DDD5] flex flex-wrap sm:flex-nowrap items-center justify-between gap-4 shadow-sm">
+            <div class="flex items-center gap-4">
+              <img src="${item.img}" alt="${item.title}" class="w-16 h-24 object-cover rounded-lg border border-[#E2DDD5]">
+              <div>
+                <h4 class="font-bold text-base">${item.title}</h4>
+                <span class="text-sm font-extrabold text-[#9E2A2B]">${item.price} ₽ / шт.</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 ml-auto">
+              <div class="flex items-center border border-[#E2DDD5] rounded-lg overflow-hidden bg-[#F7F4EE]">
+                <button onclick="changeQty(${item.id}, -1)" class="px-3 py-1.5 hover:bg-[#181818] hover:text-white font-bold transition">-</button>
+                <span class="px-3 py-1.5 text-sm font-bold">${item.qty}</span>
+                <button onclick="changeQty(${item.id}, 1)" class="px-3 py-1.5 hover:bg-[#181818] hover:text-white font-bold transition">+</button>
+              </div>
+              <span class="font-extrabold text-base w-20 text-right">${item.price * item.qty} ₽</span>
+              <button onclick="removeItem(${item.id})" class="text-gray-400 hover:text-red-600 px-2 py-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      const subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+      const discount = Math.round(subtotal * (discountPercent / 100));
+      const total = subtotal - discount;
+
+      document.getElementById('sum-count').innerText = totalCount + ' шт.';
+      document.getElementById('sum-subtotal').innerText = subtotal + ' ₽';
+      document.getElementById('sum-discount').innerText = '- ' + discount + ' ₽';
+      document.getElementById('sum-total').innerText = total + ' ₽';
+    }
+
+    function submitOrder(e) {
+      e.preventDefault();
+      const cart = getCart();
+      if (cart.length === 0) {
+        showToast("Сначала добавьте хотя бы один том в корзину!");
+        return;
+      }
+      const name = document.getElementById('cust-name').value;
+      const totalText = document.getElementById('sum-total').innerText;
+      document.getElementById('order-success-text').innerText =
+        `Спасибо, ${name}! Ваш заказ в SAMURAI SHOP на сумму ${totalText} успешно оформлен. Наш менеджер свяжется с вами в ближайшее время.`;
+      localStorage.removeItem('samurai_cart');
+      renderCart();
+      document.getElementById('order-success-modal').classList.remove('hidden');
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>
