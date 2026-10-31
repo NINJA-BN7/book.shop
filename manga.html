@@ -102,20 +102,26 @@
       </a>
     </div>
 
+    <!-- Информационная плашка о разделении -->
+    <div class="mb-6 p-4 rounded-xl bg-[#EFECE6] border border-[#C5A059] flex flex-wrap items-center justify-between gap-3 text-sm">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-wand-magic-sparkles text-[#9E2A2B] text-lg"></i>
+        <span>Ищете книги о <strong>Гарри Поттере</strong>? Они вынесены в отдельный раздел <strong>«Книги»</strong>.</span>
+      </div>
+      <a href="books.html" class="btn-samurai px-4 py-2 rounded-lg text-xs font-bold">Перейти к книгам Гарри Поттера →</a>
+    </div>
+
     <!-- Фильтры и поиск -->
     <div class="bg-[#EFECE6] p-4 rounded-xl border border-[#E2DDD5] mb-8 flex flex-wrap items-center justify-between gap-4">
       <div class="flex flex-wrap items-center gap-2">
         <button onclick="setFilter('all')" id="btn-all" class="filter-btn filter-active bg-white text-[#181818] px-4 py-2 rounded-lg text-xs font-bold border border-[#E2DDD5] transition">
-          Все тома (13)
+          Вся манга (8)
         </button>
         <button onclick="setFilter('bluelock')" id="btn-bluelock" class="filter-btn bg-white text-[#181818] px-4 py-2 rounded-lg text-xs font-bold border border-[#E2DDD5] transition">
-          Блю Лок (Blue Lock)
+          Блю Лок (Blue Lock) (4)
         </button>
         <button onclick="setFilter('jjk')" id="btn-jjk" class="filter-btn bg-white text-[#181818] px-4 py-2 rounded-lg text-xs font-bold border border-[#E2DDD5] transition">
-          Магическая битва
-        </button>
-        <button onclick="setFilter('special')" id="btn-special" class="filter-btn bg-white text-[#181818] px-4 py-2 rounded-lg text-xs font-bold border border-[#E2DDD5] transition">
-          Спецвыпуски
+          Магическая битва (4)
         </button>
       </div>
 
@@ -153,32 +159,26 @@
 
   <script>
     const mangaList = [
-      // Блю Лок (твои фото)
+      // Блю Лок (оригинальная манга)
       { id: 1, category: "bluelock", title: "Блю Лок (Blue Lock) — Том 1", price: 690, badge: "Том 1", img: "https://ir.ozone.ru/s3/multimedia-p/c1000/6676561573.jpg", desc: "Начало проекта «Синяя тюрьма». 300 юных нападающих борются за место единственного лучшего форварда сборной Японии." },
       { id: 2, category: "bluelock", title: "Блю Лок (Blue Lock) — Том 2", price: 690, badge: "Том 2", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcME6IyGnrFGbrZov5c_nAK3dc1wlC2AlD_lnTEl0Ufg&s=10", desc: "Первый отборочный этап внутри корпуса Z. Пробуждение пространственного видения Исаги Йоичи." },
       { id: 3, category: "bluelock", title: "Блю Лок (Blue Lock) — Том 7", price: 720, badge: "Том 7", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTB9-zwUhhoeduBfAAlY-zYKD_Xnm6Eyz6x3qfEwPN1Iw&s=10", desc: "Второй отбор и битва на выбывание. Формирование сильнейших троек и дуэль против Рина Итоши." },
       { id: 4, category: "bluelock", title: "Блю Лок (Blue Lock) — Том 18", price: 750, badge: "Том 18", img: "https://i.pinimg.com/236x/94/5a/28/945a28aa8d9e67c96f0aca242093c23d.jpg", desc: "Лига Нео-Эгоистов! Клубы Европы вступают в игру, а Исаги выходит на уровень мировых звёзд." },
 
-      // Магическая битва (твои фото)
+      // Магическая битва (оригинальная манга)
       { id: 5, category: "jjk", title: "Магическая битва — Том 1", price: 690, badge: "Том 1", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTuKtDS8PO9hvonuVYQvfPI3s0fQH76z4RxSJOYaz7-g&s=10", desc: "Юдзи Итадори проглатывает проклятый палец Двуликого Сукуны и поступает в Токийский магический колледж." },
       { id: 6, category: "jjk", title: "Магическая битва — Том 5", price: 710, badge: "Том 5", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgY9YI_GhWOifQTCbjsbPnRukk6o2epg1dlOd8Vus8fw&s=10", desc: "Программа обмена с Киотским колледжем! Аой Тодо и Юдзи Итадори сражаются плечом к плечу против Ханами." },
       { id: 7, category: "jjk", title: "Магическая битва — Том 15", price: 750, badge: "Том 15", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwp6PIAw85mCsPjupd2RPswvixnmLEjMuyCFxXzbgxXg&s=10", desc: "Кульминация Инцидента в Сибуе. Махито против Итадори и Тодо в решающей схватке." },
-      { id: 8, category: "jjk", title: "Магическая битва — Том 26", price: 790, badge: "Том 26 • Хит", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiMVHsEsQTlPoyIFS-Vhy2MCJkKMgHDRSGcYWlNF37tA&s=10", desc: "Легендарная битва сильнейшего мага современности Сатору Годжо против Короля проклятий Сукуны." },
-
-      // Спецвыпуски (твои 5 дополнительных фото)
-      { id: 401, category: "special", title: "Jujutsu Kaisen — Спецвыпуск «Король Проклятий»", price: 890, badge: "Эксклюзив #1", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7UQk3Z712ubkL-6KH1kPpLb9yR7S0iEPepSWUIYxLXg&s=10", desc: "Лимитированное издание с альтернативной обложкой и цветными вкладками." },
-      { id: 402, category: "special", title: "Blue Lock — Коллекционный Том «Пробуждение Эго»", price: 890, badge: "Эксклюзив #2", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8b8XzbzOdHdb_dJMheD-Ly1Kt59wQeYGwuTgbjU8jCQ&s=10", desc: "Специальное издание для фанатов Blue Lock с постер-карточками внутри." },
-      { id: 403, category: "special", title: "Jujutsu Kaisen — Арка «Скрытый Инвентарь»", price: 920, badge: "Эксклюзив #3", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMGeFZF5-WzRktgRuD2OvnYoce5XmRzYryOwypGgeqbQ&s=10", desc: "История прошлого Сатору Годжо и Сугуру Гето в подарочном оформлении." },
-      { id: 404, category: "special", title: "Blue Lock: Эпизод Наги — Limited Edition", price: 950, badge: "Эксклюзив #4", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCGy9sUoRy3AkqcQvfYy9EhsPfaipECBaCK64OouYbWA&s=10", desc: "Взгляд на «Синюю тюрьму» глазами гения Сейширо Наги и Рео Микаге." },
-      { id: 405, category: "special", title: "Jujutsu Kaisen — Финальная Битва в Синдзюку", price: 990, badge: "Эксклюзив #5", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQk9auOlILW_DnjARHoAaGefJsGO4kDW1s-LYg_GQ-qw&s=10", desc: "Делюкс-выпуск главной битвы манги с тиснением золотой фольгой." }
+      { id: 8, category: "jjk", title: "Магическая битва — Том 26", price: 790, badge: "Том 26 • Хит", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiMVHsEsQTlPoyIFS-Vhy2MCJkKMgHDRSGcYWlNF37tA&s=10", desc: "Легендарная битва сильнейшего мага современности Сатору Годжо против Короля проклятий Сукуны." }
     ];
 
     let activeCategory = 'all';
 
     function setFilter(cat) {
       activeCategory = cat;
-      ['all', 'bluelock', 'jjk', 'special'].forEach(c => {
-        document.getElementById('btn-' + c).classList.toggle('filter-active', c === cat);
+      ['all', 'bluelock', 'jjk'].forEach(c => {
+        const btn = document.getElementById('btn-' + c);
+        if (btn) btn.classList.toggle('filter-active', c === cat);
       });
       renderManga();
     }
